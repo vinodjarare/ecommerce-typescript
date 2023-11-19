@@ -85,6 +85,6 @@ userSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-const userModel = model<IUser>("User", userSchema);
+const User = model<IUser>("User", userSchema);
 
-export default userModel;
+export default User;
