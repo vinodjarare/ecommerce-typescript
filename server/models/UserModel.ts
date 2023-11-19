@@ -3,19 +3,8 @@ import validator from "validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { IUser } from "../types/models";
 
-
-
-interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  avatar?: string;
-  role: "user" | "admin";
-  createdAt: Date;
-  resetPasswordToken?: string;
-  resetPasswordExpire?: Date;
-}
 
 const userSchema = new Schema<IUser>({
   name: {

@@ -1,41 +1,5 @@
 import { Document, Schema, model, Types } from "mongoose";
-
-interface IShippingInfo {
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  pinCode: number;
-  phoneNo: number;
-}
-
-interface IOrderItem {
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  id: Types.ObjectId;
-}
-
-interface IPaymentInfo {
-  id: string;
-  status: string;
-}
-
-interface IOrder extends Document {
-  shippingInfo: IShippingInfo;
-  orderItems: IOrderItem[];
-  user: Types.ObjectId;
-  paymentInfo: IPaymentInfo;
-  paidAt: Date;
-  itemsPrice: number;
-  taxPrice: number;
-  shippingPrice: number;
-  totalPrice: number;
-  orderStatus: string;
-  deliveredAt?: Date;
-  createdAt: Date;
-}
+import {IOrder} from '../types/models'
 
 const orderSchema = new Schema<IOrder>({
   shippingInfo: {
