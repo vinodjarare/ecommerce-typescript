@@ -25,6 +25,7 @@ coverage
 
 *.env
 
+/uploads
 # nyc test coverage
 .nyc_output
 

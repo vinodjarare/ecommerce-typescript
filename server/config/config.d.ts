@@ -5,6 +5,8 @@ declare global {
       JWT_SECRET: string;
       DB_URI?: string;
       NODE_ENV?: string;
+      COOKIE_EXPIRE?: string;
+      JWT_EXPIRE?: string;
     }
   }
 }

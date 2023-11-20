@@ -1,8 +1,0 @@
-{
-  "entryFile": "server/server.ts",
-  "noImplicitAdditionalProperties": "throw-on-extras",
-  "spec": {
-    "outputDirectory": "dist",
-    "specVersion": 3
-  }
-}

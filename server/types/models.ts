@@ -8,6 +8,8 @@ export interface IUser extends Document {
   createdAt: Date;
   resetPasswordToken?: string;
   resetPasswordExpire?: Date;
+  getJWTToken: () => string;
+  comparePassword:(password:string)=>Promise<string>
 }
 
 export interface IReview {
