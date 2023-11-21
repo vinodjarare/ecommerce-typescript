@@ -4,7 +4,7 @@ import asyncError from '../utils/asyncError';
 import User from '../models/UserModel';
 import ErrorHandler from '../utils/errorHandler';
 
-const isAuthenticated = asyncError(
+export const isAuthenticatedUser = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization || req.cookies.token;
     if (!token)
@@ -21,13 +21,17 @@ const isAuthenticated = asyncError(
   }
 );
 
-export const authorizeAdmin = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.user?.role !== 'admin') {
-    return next(new ErrorHandler('Only Admin Allowed', 405));
-  }
-  next();
+export const authorizeRoles = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user?.role)) {
+      return next(
+        new ErrorHandler(
+          `Role: ${req.user?.role} is not allowed to access this resouce `,
+          403
+        )
+      );
+    }
+
+    next();
+  };
 };
