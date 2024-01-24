@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import User from '../models/UserModel';
+import User from '../models/user.model';
 
 export const registerValidation = [
   body('name').notEmpty().withMessage('Name field is required.'),

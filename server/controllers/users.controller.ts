@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/UserModel';
+import User from '../models/user.model';
 import { IFile, upload } from '../utils/upload';
 import sendToken from '../utils/jwtToken';
 import asyncError from '../utils/asyncError';
 import ErrorHandler from '../utils/errorHandler';
+import sendEmail from '../utils/sendMail'
 import crypto from 'crypto';
 export const register = async (
   req: Request,
@@ -136,7 +137,7 @@ export const resetPassword = asyncError(
 
 export const getUserDetails = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user_id = req.user?.id as string;
+    const user_id = req?.user?._id as string;
     const user = await User.findById(user_id);
 
     res.status(200).json({
@@ -169,7 +170,7 @@ export const updateProfile = asyncError(
       email: req.body.email,
     };
 
-    const user = await User.findByIdAndUpdate(req.user?.id, newUserData, {
+    const user = await User.findByIdAndUpdate(req?.user?._id, newUserData, {
       new: true,
       runValidators: true,
       useFindAndModify: false,

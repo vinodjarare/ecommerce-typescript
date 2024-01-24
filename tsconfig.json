@@ -7,5 +7,5 @@
     "skipLibCheck": true,
     "outDir": "dist"
   },
-  "include": ["server/**/*"]
+  "include": ["server/**/*", "server/config/*.d.ts"]
 }

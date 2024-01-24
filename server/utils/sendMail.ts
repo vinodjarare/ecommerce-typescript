@@ -27,4 +27,4 @@ const sendEmail = async (options:Params) => {
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = sendEmail;
+export default sendEmail;
