@@ -4,7 +4,7 @@ import { IUser } from "../types/models";
 declare global {
   namespace Express {
     interface Request {
-      user: JwtPayload | null | IUser;
+      user?:  null | IUser;
     }
   }
 }

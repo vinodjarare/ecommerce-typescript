@@ -23,7 +23,7 @@ export const isAuthenticatedUser = asyncError(
 
 export const authorizeRoles = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!roles.includes(req.user?.role)) {
+    if (!roles.includes(req.user?.role as string)) {
       return next(
         new ErrorHandler(
           `Role: ${req.user?.role} is not allowed to access this resouce `,
