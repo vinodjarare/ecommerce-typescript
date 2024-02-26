@@ -70,3 +70,10 @@ export interface IOrder extends Document {
   deliveredAt?: Date;
   createdAt: Date;
 }
+
+export interface Review {
+  user: Types.ObjectId;
+  name: string;
+  rating: number;
+  comment: string;
+}

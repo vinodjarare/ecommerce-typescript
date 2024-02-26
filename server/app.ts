@@ -19,7 +19,7 @@ declare global {
 
 app.use(express.json());
 
-app.use(morgan('tiny'));
+app.use(morgan('dev'));
 
 app.use('/api/v1', router);
 

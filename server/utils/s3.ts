@@ -29,7 +29,7 @@ const generateSignedUrl = async (key: string, expires: number = 600) => {
   }
 };
 
-const uploadFile = async (filename: string, body: Buffer) => {
+const uploadFile = async (filename: string, body: Buffer):Promise<string> => {
   if (process.env.BUCKET_NAME) {
     const params = {
       Bucket: process.env.BUCKET_NAME,
@@ -40,7 +40,7 @@ const uploadFile = async (filename: string, body: Buffer) => {
     const command = new PutObjectCommand(params);
     const response = await s3Client.send(command);
 
-    return response.ETag;
+    return response.ETag as string;
   } else {
     fs.mkdirSync(filename.substring(0, filename.lastIndexOf('/')), {
       recursive: true,
