@@ -5,8 +5,9 @@ import { deleteFile, uploadFile } from '@utils/s3';
 import SearchProduct from '@utils/productSearch';
 import ErrorHandler from '@utils/errorHandler';
 import { Review } from '../types/models';
+import { upload } from '@utils/upload';
 
-const PRODUCT_DESTINATION = `products/`;
+const PRODUCT_DESTINATION = `products`;
 
 export const createProduct = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -17,10 +18,7 @@ export const createProduct = asyncError(
       files &&
       (await Promise.all(
         files?.map((file: Express.Multer.File) => {
-          const fileKey = `${PRODUCT_DESTINATION}${Date.now()}-${
-            file.originalname
-          }`;
-          return uploadFile(fileKey, file.buffer);
+          return upload(file, PRODUCT_DESTINATION);
         })
       ));
 
@@ -103,10 +101,7 @@ export const updateProduct = asyncError(
     const images: string[] = files
       ? await Promise.all(
           files?.map((file: Express.Multer.File) => {
-            const fileKey = `${PRODUCT_DESTINATION}${Date.now()}-${
-              file.originalname
-            }`;
-            return uploadFile(fileKey, file.buffer);
+            return upload(file, PRODUCT_DESTINATION);
           })
         )
       : [];
