@@ -12,14 +12,14 @@ import {
   updatePassword,
   updateProfile,
   updateUserRole,
-} from '../controllers/users.controller';
-import upload from '../utils/uploader';
+} from '@controllers/users.controller';
+import upload from '@utils/uploader';
 import {
   loginValidation,
   registerValidation,
-} from '../validation/user.validation';
-import validateRequest from '../validation/validate';
-import { authorizeRoles, isAuthenticatedUser } from '../middleware/auth';
+} from '@validation/user.validation';
+import validateRequest from '@validation/validate';
+import { authorizeRoles, isAuthenticatedUser } from '@middleware/auth';
 const router = Router();
 
 router.post(

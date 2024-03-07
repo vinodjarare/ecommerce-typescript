@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import Product from '../models/product.model';
-import asyncError from '../utils/asyncError';
-import { deleteFile, uploadFile } from '../utils/s3';
-import SearchProduct from '../utils/productSearch';
-import ErrorHandler from '../utils/errorHandler';
+import Product from '@models/product.model';
+import asyncError from '@utils/asyncError';
+import { deleteFile, uploadFile } from '@utils/s3';
+import SearchProduct from '@utils/productSearch';
+import ErrorHandler from '@utils/errorHandler';
 import { Review } from '../types/models';
 
 const PRODUCT_DESTINATION = `products/`;
@@ -150,10 +150,99 @@ export const deleteProduct = asyncError(
   }
 );
 
-
 //TODO: craeate review
 
 /**
  * @PUT
  * @route /api/product/review
  */
+
+export const createReview = asyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { rating, comment, productId } = req.body;
+    const review = {
+      user: req?.user?._id,
+      name: req?.user?.name,
+      rating: Number(rating),
+      comment,
+    } as Review;
+
+    const product = await Product.findById(productId);
+
+    const isReviewed = product?.reviews?.find(
+      r => r.user.toString() === req?.user?._id.toString()
+    );
+
+    if (isReviewed) {
+      product?.reviews?.forEach(review => {
+        if (review.user.toString() === req?.user?._id.toString()) {
+          review.comment = comment;
+          review.rating = rating;
+        }
+      });
+    } else {
+      product?.reviews?.push(review);
+      product!.numOfReviews++;
+    }
+
+    product!.ratings =
+      product!.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+      product!.reviews?.length;
+
+    await product?.save({ validateBeforeSave: false });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Review added successfully',
+    });
+  }
+);
+
+/**
+ * @DELETE
+ * @route /api/product/review
+ */
+
+export const deleteReview = asyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const product = await Product.findById(req.query.productId);
+
+    const reviews = product?.reviews?.filter(
+      review => review.user.toString() !== req?.user?._id.toString()
+    );
+
+    const numOfReviews = reviews?.length as number;
+
+    const ratings =
+      product!.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+      numOfReviews;
+
+    await Product.findByIdAndUpdate(req.query.productId, {
+      reviews,
+      ratings,
+      numOfReviews,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Review deleted successfully',
+    });
+  }
+);
+
+/**
+ * @GET
+ * @route /api/v1/product/reviews
+ */
+
+export const getProductReviews = asyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const product = await Product.findById(req.query.productId);
+    if (!product) return next(new ErrorHandler('Product not found', 404));
+    res.status(200).json({
+      success: true,
+      message: 'Product reviews fetched successfully',
+      data: product?.reviews,
+    });
+  }
+);

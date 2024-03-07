@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/user.model';
-import { IFile, upload } from '../utils/upload';
-import sendToken from '../utils/jwtToken';
-import asyncError from '../utils/asyncError';
-import ErrorHandler from '../utils/errorHandler';
-import sendEmail from '../utils/sendMail'
+import User from '@models/user.model';
+import { IFile, upload } from '@utils/upload';
+import sendToken from '@utils/jwtToken';
+import asyncError from '@utils/asyncError';
+import ErrorHandler from '@utils/errorHandler';
+import sendEmail from '@utils/sendMail'
 import crypto from 'crypto';
 export const register = async (
   req: Request,

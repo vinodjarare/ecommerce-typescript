@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import upload from '../utils/uploader';
-import { createProduct } from '../controllers/product.controller';
-import { authorizeRoles, isAuthenticatedUser } from '../middleware/auth';
+import upload from '@utils/uploader';
+import { createProduct } from '@controllers/product.controller';
+import { authorizeRoles, isAuthenticatedUser } from '@middleware/auth';
 
 const router = Router();
 
 router
-  .route('/')
+  .route('/products')
   .post(
     isAuthenticatedUser,
     authorizeRoles('admin'),

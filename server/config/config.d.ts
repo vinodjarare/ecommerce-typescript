@@ -7,6 +7,8 @@ declare global {
       NODE_ENV?: string;
       COOKIE_EXPIRE?: string;
       JWT_EXPIRE?: string;
+      STRIPE_API_KEY: string;
+      STRIPE_SECRET_KEY: string;
     }
   }
 }

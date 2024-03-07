@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
-import asyncError from '../utils/asyncError';
-import User from '../models/user.model';
-import ErrorHandler from '../utils/errorHandler';
+import asyncError from '@utils/asyncError';
+import User from '@models/user.model';
+import ErrorHandler from '@utils/errorHandler';
 
 export const isAuthenticatedUser = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {

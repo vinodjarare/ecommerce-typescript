@@ -1,7 +1,7 @@
 import express, { Request, Response, Application } from 'express';
 import morgan from 'morgan';
 import errorMiddleware from './middleware/errorMiddleware';
-import router from './routes/router';
+import router from './routes';
 import * as dotenv from 'dotenv';
 import { IUser } from './types/models';
 dotenv.config({ path: 'server/config/config.env' });
@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use(morgan('dev'));
 
-app.use('/api/v1', router);
+app.use('/api', router);
 
 app.use('/', (req: Request, res: Response) => res.send('Hello World'));
 app.use(errorMiddleware);
