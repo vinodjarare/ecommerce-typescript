@@ -4,7 +4,7 @@ import { IFile, upload } from '@utils/upload';
 import sendToken from '@utils/jwtToken';
 import asyncError from '@utils/asyncError';
 import ErrorHandler from '@utils/errorHandler';
-import sendEmail from '@utils/sendMail'
+import sendEmail from '@utils/sendMail';
 import crypto from 'crypto';
 export const register = async (
   req: Request,
@@ -107,6 +107,8 @@ export const resetPassword = asyncError(
       .update(req.params.token)
       .digest('hex');
 
+    console.log('resetPasswordToken', resetPasswordToken);
+
     const user = await User.findOne({
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
@@ -178,6 +180,7 @@ export const updateProfile = asyncError(
 
     res.status(200).json({
       success: true,
+      user,
     });
   }
 );
@@ -225,7 +228,7 @@ export const updateUserRole = asyncError(
       role: req.body.role,
     };
 
-    await User.findByIdAndUpdate(req.params.id, newUserData, {
+    const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
       new: true,
       runValidators: true,
       useFindAndModify: false,
@@ -233,6 +236,7 @@ export const updateUserRole = asyncError(
 
     res.status(200).json({
       success: true,
+      user,
     });
   }
 );

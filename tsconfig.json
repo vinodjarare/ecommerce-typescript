@@ -8,14 +8,15 @@
     "outDir": "dist",
     "baseUrl": "./server",
     "paths": {
-      "@controllers/*": ["controllers/*"],
-      "@models/*": ["models/*"],
-      "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"],
-      "@middleware/*":["middleware/*"],
-      "@validation/*":["validation/*"],
-      "@routes/*":["routes/*"]
+      "@controllers/*": ["./controllers/*"],
+      "@models/*": ["./models/*"],
+      "@services/*": ["./services/*"],
+      "@utils/*": ["./utils/*"],
+      "@middleware/*": ["./middleware/*"],
+      "@validation/*": ["./validation/*"],
+      "@routes/*": ["./routes/*"]
     }
   },
-  "include": ["server/**/*", "server/config/*.d.ts"]
+  "include": ["server/**/*", "server/config/*.d.ts"],
+  "exclude": ["node_modules"]
 }

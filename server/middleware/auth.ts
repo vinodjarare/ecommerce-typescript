@@ -16,7 +16,6 @@ export const isAuthenticatedUser = asyncError(
     ) as JwtPayload;
 
     req.user = await User.findById(userToken.id);
-
     next();
   }
 );

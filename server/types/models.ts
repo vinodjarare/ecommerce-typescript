@@ -57,6 +57,7 @@ export interface IPaymentInfo {
 }
 
 export interface IOrder extends Document {
+  _id: Types.ObjectId;
   shippingInfo: IShippingInfo;
   orderItems: IOrderItem[];
   user: Types.ObjectId;

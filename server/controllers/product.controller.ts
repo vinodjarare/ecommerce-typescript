@@ -6,6 +6,7 @@ import SearchProduct from '@utils/productSearch';
 import ErrorHandler from '@utils/errorHandler';
 import { Review } from '../types/models';
 import { upload } from '@utils/upload';
+import mongoose from 'mongoose';
 
 const PRODUCT_DESTINATION = `products`;
 
@@ -36,12 +37,13 @@ export const createProduct = asyncError(
 
 /**
  * @GET
- * @route /api/v1/product
+ * @route /api/v1/products
  */
 
 export const getProducts = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const RESULT_PER_PAGE = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 1;
     // total product count
 
     const productCount = await Product.countDocuments();
@@ -62,13 +64,14 @@ export const getProducts = asyncError(
       productCount,
       filteredProductCount,
       limit: RESULT_PER_PAGE,
+      page,
     });
   }
 );
 
 /**
  * @GET
- * @route /api/v1/product/:id
+ * @route /api/v1/products/:id
  */
 
 export const getProduct = asyncError(
@@ -87,7 +90,7 @@ export const getProduct = asyncError(
 
 /**
  * @PUT
- * @route /api/v1/product/:id
+ * @route /api/v1/products/:id
  */
 
 export const updateProduct = asyncError(
@@ -123,7 +126,7 @@ export const updateProduct = asyncError(
 
 /**
  * @DELETE
- * @route /api/v1/product/:id
+ * @route /api/v1/products/:id
  */
 
 export const deleteProduct = asyncError(
@@ -149,46 +152,48 @@ export const deleteProduct = asyncError(
 
 /**
  * @PUT
- * @route /api/product/review
+ * @route /api/products/review
  */
 
 export const createReview = asyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const { rating, comment, productId } = req.body;
     const review = {
-      user: req?.user?._id,
-      name: req?.user?.name,
+      user:new mongoose.Types.ObjectId(req.user?._id),
+      name: req.user?.name as string,
       rating: Number(rating),
       comment,
     } as Review;
 
+  
     const product = await Product.findById(productId);
-
-    const isReviewed = product?.reviews?.find(
-      r => r.user.toString() === req?.user?._id.toString()
+  
+    const isReviewed = product!.reviews.find(
+      (rev) => rev.user.toString() === req.user?._id.toString()
     );
-
+  
     if (isReviewed) {
-      product?.reviews?.forEach(review => {
-        if (review.user.toString() === req?.user?._id.toString()) {
-          review.comment = comment;
-          review.rating = rating;
-        }
+      product!.reviews.forEach((rev) => {
+        if (rev.user.toString() === req.user?._id.toString())
+          (rev.rating = rating), (rev.comment = comment);
       });
     } else {
-      product?.reviews?.push(review);
-      product!.numOfReviews++;
+      product!.reviews.push(review);
+      product!.numOfReviews = product!.reviews.length;
     }
-
-    product!.ratings =
-      product!.reviews?.reduce((acc, item) => item.rating + acc, 0) /
-      product!.reviews?.length;
-
-    await product?.save({ validateBeforeSave: false });
-
-    return res.status(200).json({
+  
+    let avg = 0;
+  
+    product!.reviews.forEach((rev) => {
+      avg += rev.rating;
+    });
+  
+    product!.ratings = avg / product!.reviews.length;
+  
+    await product!.save({ validateBeforeSave: false });
+  
+    res.status(200).json({
       success: true,
-      message: 'Review added successfully',
     });
   }
 );
@@ -209,8 +214,8 @@ export const deleteReview = asyncError(
     const numOfReviews = reviews?.length as number;
 
     const ratings =
-      product!.reviews?.reduce((acc, item) => item.rating + acc, 0) /
-      numOfReviews;
+      (product!.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+      numOfReviews) ?? 0;
 
     await Product.findByIdAndUpdate(req.query.productId, {
       reviews,

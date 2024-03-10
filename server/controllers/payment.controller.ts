@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import asyncError from '@utils/asyncError';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY);
+const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
 export const getPayment = asyncError(async (req: Request, res: Response) => {
   const { amount } = req.body as { amount: number };
@@ -27,7 +27,7 @@ export const getPayment = asyncError(async (req: Request, res: Response) => {
 export const sendStripeApiKey = asyncError(
   async (req: Request, res: Response) => {
     res.status(200).json({
-      stripeApiKey: process.env.STRIPE_SECRET_KEY,
+      stripeApiKey: process.env.STRIPE_SECRET_KEY as string,
     });
   }
 );

@@ -49,10 +49,10 @@ router
   .get(isAuthenticatedUser, authorizeRoles('admin'), getAllUsers);
 
 router
-  .route('/admin/user/:id')
+  .route('/admin/users/:id')
   .get(isAuthenticatedUser, authorizeRoles('admin'), getSingleUser)
   .put(isAuthenticatedUser, authorizeRoles('admin'), updateUserRole)
   .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteUser);
 
-module.exports = router;
+
 export default router;
